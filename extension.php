@@ -1,0 +1,1 @@
+header("Content-Type: JSON");
