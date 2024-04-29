@@ -1,3 +1,12 @@
+// step 1 go to android stdio past the code and add the pakege change the url ok 
+// step 2 go to XJAM  file htdeo create file name anything  past the php code change the only database name ok
+//step 3 go to phpmyadmain create database name anything  create id name email mobile , go to sql all cut past the code 167 line ok
+
+
+
+
+
+
 import 'dart:async';
 import 'dart:convert';
 
@@ -101,7 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
 
-//
+
 
 
 
@@ -151,7 +160,7 @@ mysqli_close($conn);
 ?>
 
 
-
+// create Dtabase
 // create id name email mobile
 // the add database sql in all cut 
 
@@ -166,6 +175,6 @@ CREATE TABLE users (
 
  //ok 
 
-
+// the add php code database name 
 
 
