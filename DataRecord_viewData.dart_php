@@ -1,0 +1,378 @@
+
+// step 1 go to android stdio past the code change the url add the http pakege ok
+// step 2  go to htdoc create file name anything past the code change the data base name ok
+//step 3 go to database create database name anything create id, heading, body , go to sql all cut past database code ok
+// step 4 php code add the name ok
+
+
+
+
+
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:rann/Entry.dart';
+
+void main() => runApp(new MyApp());
+
+String username = '';
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return new MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Flutter App with MYSQL',
+      home: new MyHomePage(),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  TextEditingController heading = new TextEditingController();
+  TextEditingController body = new TextEditingController();
+  //TextEditingController mobile = new TextEditingController();
+
+  Future<void> post() async {
+    final response = await http.post(
+      Uri.parse('http://localhost/s/rishi.php'),
+      body: {
+        "heading": heading.text,
+        "body": body.text,
+       // "mobile": mobile.text,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      // Registration successful
+      print('Registration successful');
+    } else {
+      // Registration failed
+      print('Registration failed');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Register")),
+      body: Container(
+        child: Center(
+          child: Column(
+            children: <Widget>[
+              Text("heading", style: TextStyle(fontSize: 18.0)),
+              TextField(
+                controller: heading,
+                decoration: InputDecoration(
+                  hintText: 'heading',
+                ),
+              ),
+              Text("body", style: TextStyle(fontSize: 18.0)),
+              TextField(
+                controller: body,
+                decoration: InputDecoration(
+                  hintText: 'body',
+                ),
+              ),
+             // Text("Mobile", style: TextStyle(fontSize: 18.0)),
+            //  TextField(
+              //  controller: mobile,
+             //   decoration: InputDecoration(
+              //    hintText: 'Mobile',
+              //  ),
+              //),
+              ElevatedButton(
+                child: Text("Register"),
+                onPressed: () {
+                  post(); // Call the post function
+                },
+
+              ),
+          Container(
+            margin: EdgeInsets.all(10),
+            child: Builder(
+              builder: (context){
+                return ElevatedButton(onPressed: (){
+                  Navigator.push(context,MaterialPageRoute(builder: (context)=>Entry()));
+                }, child: Text("view Data"));
+              },
+            )
+          ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+
+// php code 
+
+
+<?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+// Get the data from the POST request
+$heading = isset($_POST['heading']) ? $_POST['heading'] : '';
+$body = isset($_POST['body']) ? $_POST['body'] : '';
+//$mobile = isset($_POST['mobile']) ? $_POST['mobile'] : '';
+
+// Connect to the MySQL database
+$host = 'localhost';
+$user = 'root';
+$password = '';
+$database = 'Rajs';
+
+$conn = mysqli_connect($host, $user, $password, $database);
+
+if (!$conn) {
+    die('Connection failed: ' . mysqli_connect_error());
+}
+
+// Check if the users table exists
+$table_exists = mysqli_query($conn, "SHOW TABLES LIKE 'users'");
+if (!$table_exists || mysqli_num_rows($table_exists) == 0) {
+    die('Table users does not exist');
+}
+
+// Insert the data into the MySQL database
+$sql = "INSERT INTO users (heading, body) VALUES ('$heading', '$body')";
+
+if (mysqli_query($conn, $sql)) {
+    echo 'New record created successfully';
+} else {
+    echo 'Error: ' . mysqli_error($conn);
+}
+
+mysqli_close($conn);
+?>
+
+
+
+
+// Database code
+
+
+CREATE TABLE users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  heading VARCHAR(255) NOT NULL,
+  body VARCHAR(255) NOT NULL,
+  
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// step 1 goto android stdio  past the code  change the url ok
+// step 2 goto XAJM htdoc file create file name anything  1 name 2nd name past the code database name and SELECT * FROM (... ) name add ok
+// step 3 goto phpmyadmain create database name anything create table id headig body insert the data ok 
+// step 4 add the php code database name ok
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+void main() {
+  runApp(MaterialApp(
+    home: Scaffold(
+      appBar: AppBar(
+        title: Text("Connect to Server"),
+      ),
+      body: Entry(),
+    ),
+  ));
+}
+
+class Entry extends StatefulWidget {
+  const Entry({super.key});
+
+  @override
+  State<Entry> createState() => _EntryState();
+}
+
+class _EntryState extends State<Entry> {
+  Future<List<Data>> getMethod() async {
+    final url = Uri.parse('http://localhost/Rajs/getData.php');
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      final List<Data> dataList = (data as List).map((item) => Data.fromJson(item)).toList();
+      return dataList;
+    } else {
+      print('Error: ${response.statusCode}');
+      throw Exception('Failed to load data');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Connect to Server"),
+      ),
+      body: FutureBuilder<List<Data>>(
+        future: getMethod(),
+        builder: (BuildContext context, AsyncSnapshot<List<Data>> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text('Error: ${snapshot.error}'),
+            );
+          } else {
+            final List<Data> dataList = snapshot.data!;
+            return ListView.builder(
+              itemCount: dataList.length,
+              itemBuilder: (context, index) {
+                final Data data = dataList[index];
+                return ListTile(
+                  title: Text("Head: ${data.heading}"),
+                  subtitle: Text("Body: ${data.body}"),
+                );
+              },
+            );
+          }
+        },
+      ),
+    );
+  }
+}
+
+class Data {
+  final String heading;
+  final String body;
+
+  Data({required this.heading, required this.body});
+
+  factory Data.fromJson(Map<String, dynamic> json) {
+    return Data(
+      heading: json['heading'],
+      body: json['body'],
+    );
+  }
+}
+
+
+// Entry php code 
+
+
+  
+
+
+
+// the code  name connection.php
+
+
+<?php
+try{
+    $connection =new PDO('mysql:host=localhost;dbname=Rajs','root','');
+    $connection->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+   // echo"ok connection";
+
+
+}
+catch(PDOException $exc){
+    echo $exc->getMessage();
+    die('could not connect');
+
+}
+
+
+
+?>
+
+//the code name getData.php
+
+
+
+        
+
+<?php
+
+require("connection.php");
+
+$makeQuery = "SELECT * FROM users";
+$stamement = $connection->prepare($makeQuery);
+$stamement->execute();
+$myarray =array();
+while($resultsFrom = $stamement ->fetch()){
+    array_push(
+        $myarray,array(
+            "id"=>$resultsFrom['id'],
+            "heading"=>$resultsFrom['heading'],
+            "body"=>$resultsFrom['body']
+
+        )
+        );
+
+}
+
+echo json_encode($myarray);
+
+
+
+
+?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
