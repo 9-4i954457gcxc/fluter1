@@ -185,12 +185,10 @@ CREATE TABLE users (
 
 
 
-
-// step 1 goto android stdio  past the code  change the url ok
 // step 2 goto XAJM htdoc file create file name anything  1 name 2nd name past the code database name and SELECT * FROM (... ) name add ok
-// step 3 goto phpmyadmain create database name anything create table id headig body insert the data ok 
-// step 4 add the php code database name ok
 
+// step 3 change  the php code database name ok
+// step 4 change the url ok 
 
 
 
