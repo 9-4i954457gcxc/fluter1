@@ -1,10 +1,11 @@
 //step 1 go to Android Stdio past the code add the http pekage change the url ok
+//step 2 go to htdoc create file name anything past the php code 131 past the code change the db name and SELECT ok
 //step 2 go to  htdoc create the file name anything past the code 139 line change the db name ok
 //step 3 go to phpmyadmain create database id heading body ok 
 
 
 
-
+// step 1
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -123,6 +124,80 @@ class Data {
     );
   }
 }
+
+
+
+
+//code php 
+
+
+// the code  name connection.php
+
+
+<?php
+try{
+    $connection =new PDO('mysql:host=localhost;dbname=flutter','root','');
+    $connection->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+   // echo"ok connection";
+
+
+}
+catch(PDOException $exc){
+    echo $exc->getMessage();
+    die('could not connect');
+
+}
+
+
+
+?>
+
+//the code name getData.php
+
+
+<?php
+
+require("connection.php");
+
+$makeQuery = "SELECT * FROM lestChat";
+$stamement = $connection->prepare($makeQuery);
+$stamement->execute();
+$myarray =array();
+while($resultsFrom = $stamement ->fetch()){
+    array_push(
+        $myarray,array(
+            "id"=>$resultsFrom['id'],
+            "heading"=>$resultsFrom['heading'],
+            "body"=>$resultsFrom['body']
+
+        )
+        );
+
+}
+
+echo json_encode($myarray);
+
+
+
+
+?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
