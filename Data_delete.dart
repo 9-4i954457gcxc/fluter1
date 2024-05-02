@@ -1,7 +1,8 @@
 //step 1 go to Android Stdio past the code add the http pekage change the url ok
 //step 2 go to htdoc create file name anything past the php code 131 past the code change the db name and SELECT ok
-//step 2 go to  htdoc create the file name anything past the code 139 line change the db name ok
+
 //step 3 go to phpmyadmain create database id heading body ok 
+//step 2 go to  htdoc create the file name anything past the code 211 line change the db name and SELECT NAME ok
 
 
 
