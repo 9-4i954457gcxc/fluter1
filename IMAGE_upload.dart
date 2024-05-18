@@ -213,7 +213,7 @@ CREATE TABLE IF NOT EXISTS `table_image` (
 
 
 
-//The PHP CODE GET THE DATA CODE
+//The PHP CODE GET THE DATA CODE change the db name
 
  <?php
 error_reporting(E_ALL);
