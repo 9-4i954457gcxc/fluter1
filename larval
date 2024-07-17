@@ -1,0 +1,13 @@
+// the laravel comand line
+
+
+composer create-project --prefer-dist laravel/laravel rishi
+
+//select line
+
+cd ~/Desktop/rishi
+
+
+//server state line
+
+php artisan serve
