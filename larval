@@ -11,3 +11,8 @@ cd ~/Desktop/rishi
 //server state line
 
 php artisan serve
+
+
+
+//create the file 
+php artisan make:view ssview
