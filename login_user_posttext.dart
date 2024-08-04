@@ -341,3 +341,149 @@ CREATE TABLE posts (
 
 
 
+
+
+
+
+
+
+
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+import 'main.dart';
+
+class Entry extends StatefulWidget {
+  const Entry({super.key});
+
+  @override
+  State<Entry> createState() => _EntryState();
+}
+
+class _EntryState extends State<Entry> {
+  // Use a more descriptive variable name
+  Future<List<Post>> _fetchPosts() async {
+    final url = Uri.parse('http://172.18.80.80/hoo/code.php?username=${LoginState.username}');
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final jsonData = jsonDecode(response.body);
+      final List<Post> posts = (jsonData as List).map((item) => Post.fromJson(item)).toList();
+      return posts;
+    } else {
+      print('Error: ${response.statusCode}');
+      throw Exception('Failed to load data');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Connect to Server"),
+      ),
+      body: FutureBuilder<List<Post>>(
+        future: _fetchPosts(),
+        builder: (BuildContext context, AsyncSnapshot<List<Post>> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text('Error: ${snapshot.error}'),
+            );
+          } else {
+            final List<Post> posts = snapshot.data!;
+            return ListView.builder(
+              itemCount: posts.length,
+              itemBuilder: (context, index) {
+                final Post post = posts[index];
+                return ListTile(
+                //  title: Text("username: ${post.username}"),
+                  subtitle: Text(" ${post.text}"),
+                );
+              },
+            );
+          }
+        },
+      ),
+    );
+  }
+}
+
+class Post {
+  //final String username;
+  final String text;
+
+  Post({ required this.text});
+
+  factory Post.fromJson(Map<String, dynamic> json) {
+    return Post(
+      //username: json['username'],
+      text: json['text'],
+    );
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+//php code
+
+
+
+<?php
+try{
+    $connection =new PDO('mysql:host=localhost;dbname=userdata','root','');
+    $connection->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+   // echo"ok connection";
+
+
+}
+catch(PDOException $exc){
+    echo $exc->getMessage();
+    die('could not connect');
+
+}
+
+
+
+?>
+
+
+
+  //phpc code
+
+  <?php
+require("index.php");
+
+// Use prepared statements to prevent SQL injection
+$sql = "SELECT * FROM posts WHERE username = :username";
+$statement = $connection->prepare($sql);
+$statement->bindParam(':username', $_GET['username']); // bind the username parameter
+$statement->execute();
+
+// Use a more efficient way to fetch data
+$myArray = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+// Use the `json_encode` function with the `JSON_PRETTY_PRINT` option for better readability
+echo json_encode($myArray, JSON_PRETTY_PRINT);
+?>
+
+
+
+
+
+
+
