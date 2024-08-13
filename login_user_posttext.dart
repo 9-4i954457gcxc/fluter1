@@ -363,6 +363,21 @@ class Entry extends StatefulWidget {
 
 class _EntryState extends State<Entry> {
   // Use a more descriptive variable name
+String _username = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUsername();
+  }
+
+  void _loadUsername() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _username = prefs.getString('username') ?? '';
+    });
+  }
+  
   Future<List<Post>> _fetchPosts() async {
     final url = Uri.parse('http://172.18.80.80/hoo/code.php?username=${LoginState.username}');
     final response = await http.get(url);
