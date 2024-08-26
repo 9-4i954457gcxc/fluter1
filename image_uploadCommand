@@ -1,0 +1,4 @@
+ cd /Applications/XAMPP/htdocs/una/uploads
+
+
+   sudo chmod -R 777 .
